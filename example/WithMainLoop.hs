@@ -37,6 +37,6 @@ main = do
   handle <- mainLoop initialState render
   body `appendChild`  target handle
 
-  runStateT (app handle) initialState
+  evalStateT (app handle) initialState
   
 
