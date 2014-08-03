@@ -1,0 +1,16 @@
+{
+  "name": "lib",
+  "version": "0.0.0",
+  "main": "index.js",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-browserify": "^2.1.4",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-contrib-watch": "^0.6.1"
+  },
+  "dependencies": {
+    "raf": "^2.0.2",
+    "vdom": "0.0.19",
+    "vtree": "0.0.19"
+  }
+}
