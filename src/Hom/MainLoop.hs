@@ -37,13 +37,12 @@ mainLoop initialState render = do
 
 
   let update newState = do
-        putStrLn "debug"
         currentState <- readIORef currentStateRef
         redrawScheduled <- readIORef redrawScheduledRef
         when (isNothing currentState && not redrawScheduled) $ do
           writeIORef redrawScheduledRef True
-          requestAnimationFrame redraw
-          writeIORef currentStateRef (Just newState)
+          requestAnimationFrame redraw >> return ()
+        writeIORef currentStateRef (Just newState)
 
   liftIO $ return $ LoopHandle update target
 

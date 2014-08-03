@@ -1,6 +1,7 @@
 {-#LANGUAGE ScopedTypeVariables #-}
 module Hom.App
 ( runApp
+, runApp'
 )
 where
 
@@ -26,21 +27,31 @@ external action = do
 
 
 
-runApp :: forall s a. a
+runApp :: (Show s, Show a)=> a
        -> s
        -> (a -> s -> s)
        -> (s -> Node)
-       -> IO (Elem)
+       -> IO (Elem, a -> IO ())
 
 runApp  initialAction initialState step render = do
   loopHandle <- mainLoop initialState render
   let theTarget = target loopHandle
   let updateState = update loopHandle
   (signal, handle) <- external initialAction
-  let loop = forever $ (liftIO . updateState <=<  liftIO . transfer' step signal) =<< get
+  let loop = forever $ do-- ((liftIO . updateState <=<  liftIO . transfer' step signal) =<< get)
+        state <- get
+        newState <- liftIO $ transfer' step signal state
+        liftIO $ print newState
+        put newState
+        liftIO $ updateState newState
   forkIO $ evalStateT loop initialState 
-  return $ target loopHandle
+  return $ (target loopHandle, handle)
+
+
+runApp' :: (Show s, Show a)=> a -> s -> (a -> State s b) -> (s -> Node) -> IO (Elem, a -> IO ())
+runApp' ia is ss = runApp ia is (toStepper ss)
 
 
 
-
+toStepper :: (a -> State s b) -> a -> s -> s
+toStepper f a = execState (f a)
