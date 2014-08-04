@@ -1,10 +1,9 @@
 {-#LANGUAGE OverloadedStrings, TemplateHaskell #-}
 
-import Hom.Animate
-import Hom.MainLoop
-import Hom.DOM
-import Hom.VDOM
-import Control.Monad
+import Hom.MainLoop (LoopHandle, mainLoop, update, target)
+import Hom.DOM (getBody, appendChild)
+import Hom.VDOM (Node, node, text, emptyProps)
+import Control.Monad 
 import Control.Lens
 import Data.Text (pack)
 
@@ -27,7 +26,7 @@ render state =
 
 app ::  LoopHandle AppState -> StateT AppState IO ()
 app handle = forever $ do
-  liftIO . threadDelay $ 1000 * 1000
+  liftIO . threadDelay $ 1000 * 10
   counter += 1
   state <- get
   liftIO $ update handle state

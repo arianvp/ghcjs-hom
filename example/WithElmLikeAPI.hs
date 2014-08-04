@@ -39,8 +39,8 @@ main = do
   -- two "event emitters"
   forkIO . forever $ do
     handle Increment
-    threadDelay $ 1000 * 300
+    threadDelay $ 1000 * 100
 
   forkIO . forever $ do
     handle Reset
-    threadDelay $ 1000 * 4000
+    threadDelay $ 1000 * 1000

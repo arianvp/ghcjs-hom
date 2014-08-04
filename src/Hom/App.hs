@@ -38,10 +38,9 @@ runApp  initialAction initialState step render = do
   let theTarget = target loopHandle
   let updateState = update loopHandle
   (signal, handle) <- external initialAction
-  let loop = forever $ do-- ((liftIO . updateState <=<  liftIO . transfer' step signal) =<< get)
+  let loop = forever $ do
         state <- get
         newState <- liftIO $ transfer' step signal state
-        liftIO $ print newState
         put newState
         liftIO $ updateState newState
   forkIO $ evalStateT loop initialState 
