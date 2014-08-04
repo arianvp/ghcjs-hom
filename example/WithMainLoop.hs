@@ -26,7 +26,7 @@ render state =
 
 app ::  LoopHandle AppState -> StateT AppState IO ()
 app handle = forever $ do
-  liftIO . threadDelay $ 1000 * 10
+  liftIO . threadDelay $ 1000 * 10  -- fires events faster than animationframe
   counter += 1
   state <- get
   liftIO $ update handle state
